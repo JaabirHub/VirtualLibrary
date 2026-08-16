@@ -5,10 +5,18 @@ import java.util.UUID;
 
 public class UserDTO {
   private UUID id;
-    private String email;
-    private String username;
-    private Role role;
-    private LocalDateTime createdAt;
+  private String email;
+  private String username;
+  private Role role;
+  private LocalDateTime createdAt;
+
+  public UserDTO(User user) {
+    this.id = user.getId();
+    this.email = user.getEmail();
+    this.username = user.getUsername();
+    this.role = user.getRole();
+    this.createdAt = user.getCreatedAt();
+  }
 
   public UUID getId() {
     return id;
