@@ -10,10 +10,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
   @Id
@@ -42,6 +43,7 @@ public class User {
   /**
    * This saves the user's date/time on creation.
    */
+  @PrePersist
   protected void onCreate() {
     createdAt = LocalDateTime.now();
     updatedAt = LocalDateTime.now();
