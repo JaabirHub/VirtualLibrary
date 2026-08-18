@@ -46,6 +46,8 @@ jobs:
           SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
           JWT_SECRET: ${{ secrets.JWT }}
           JWT_EXPIRATION_MS: ${{ secrets.JWT_EXPIRATION }}
+          GOOGLE_BOOKS_API_KEY: ${{ secrets.GOOGLE_BOOKS_API_KEY }}
+          GOOGLE_BOOKS_API_BASE_URL: ${{ secrets.GOOGLE_BOOKS_API_BASE_URL }}
 
       - name: Build
         working-directory: backend
