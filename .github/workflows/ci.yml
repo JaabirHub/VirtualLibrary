@@ -36,6 +36,7 @@ jobs:
           cache: maven
 
       - name: Run tests
+        working-directory: ./backend
         run: mvn test
         env:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/virtuallibrary_test
@@ -53,7 +54,7 @@ jobs:
         run: mvn spotbugs:check
 
       - name: Clean Verify
-        working-directory: backend
+        working-directory: ./backend
         run: mvn clean verify
         env:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/virtuallibrary_test
