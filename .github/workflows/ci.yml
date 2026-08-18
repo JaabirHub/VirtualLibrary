@@ -35,20 +35,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run tests
-        working-directory: ./backend
-        run: mvn test
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/virtuallibrary_test
-          SPRING_DATASOURCE_USERNAME: postgres
-          SPRING_DATASOURCE_PASSWORD: postgres
-          SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
-          SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
-          JWT_SECRET: ${{ secrets.JWT }}
-          JWT_EXPIRATION_MS: ${{ secrets.JWT_EXPIRATION }}
-          GOOGLE_BOOKS_API_KEY: ${{ secrets.GOOGLE_BOOKS_API_KEY }}
-          GOOGLE_BOOKS_API_BASE_URL: ${{ secrets.GOOGLE_BOOKS_API_BASE_URL }}
-
       - name: Build
         working-directory: backend
         run: mvn package -DskipTests
@@ -66,6 +52,10 @@ jobs:
           SPRING_DATASOURCE_PASSWORD: postgres
           SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
           SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+          JWT_SECRET: ${{ secrets.JWT }}
+          JWT_EXPIRATION_MS: ${{ secrets.JWT_EXPIRATION }}
+          GOOGLE_BOOKS_API_KEY: ${{ secrets.GOOGLE_BOOKS_API_KEY }}
+          GOOGLE_BOOKS_API_BASE_URL: ${{ secrets.GOOGLE_BOOKS_API_BASE_URL }}
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
