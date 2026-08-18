@@ -1,6 +1,5 @@
 package com.jaabir.backend.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,12 +31,12 @@ public class SecurityConfig {
   }
 
   @Bean
-public SecurityContextRepository securityContextRepository() {
+  public SecurityContextRepository securityContextRepository() {
     return new RequestAttributeSecurityContextRepository();
-}
+  }
 
-@Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(session ->
@@ -56,5 +55,5 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
-}
+  }
 }
