@@ -3,6 +3,9 @@ package com.jaabir.backend.book;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,9 +28,11 @@ public class Book {
   @Column(nullable = false)
   private String title;
 
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(columnDefinition = "jsonb")
   private String authors;
 
+  @Column(columnDefinition = "text")
   private String publisher;
 
   private String publishedDate;
@@ -35,15 +40,18 @@ public class Book {
   @Column(columnDefinition = "text")
   private String description;
 
+  @Column(columnDefinition = "text")
   private String thumbnailUrl;
 
   private Integer pageCount;
 
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(columnDefinition = "jsonb")
   private String categories;
 
   private String language;
 
+  @Column(columnDefinition = "text")
   private String infoLink;
 
   @Column(nullable = false, updatable = false)
