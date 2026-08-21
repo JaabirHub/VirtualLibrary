@@ -1,0 +1,28 @@
+import api from "./api";
+import { UserBook, UserBookRequest} from "../types"
+
+export const getLibrary = async (): Promise<UserBook[]> => {
+  const response = await api.get<UserBook[]>("api/me/library");
+  return response.data;
+}
+
+export const addBook = async (request: UserBookRequest ): Promise<UserBook> => {
+  const response = await api.post<UserBook>("api/me/library", request);
+  return response.data;
+}
+
+export const updateBook = async (
+  googleVolumeId: string,
+  request: Partial<UserBookRequest>
+): Promise<UserBook> => {
+  const response = await api.patch<UserBook>(
+    `/api/me/library/${googleVolumeId}`,
+    request
+  );
+  return response.data;
+};
+
+export const removeBook = async (googleVolumeId: string): Promise<void> => {
+  await api.delete(`/api/me/library/${googleVolumeId}`);
+};
+
