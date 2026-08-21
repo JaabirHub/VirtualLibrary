@@ -97,7 +97,7 @@ jobs:
 
       - name: Lint
         working-directory: frontend
-        run: npm run lint --dir .
+        run: npx eslint . --ext .ts,.tsx
 
       - name: Build
         working-directory: frontend
