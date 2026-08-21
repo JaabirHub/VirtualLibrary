@@ -1,8 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches: [ '**' ]
   pull_request:
     branches: [ '**' ]
 
@@ -15,9 +13,9 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_DB: ${{ secrets.DB_NAME }}
-          POSTGRES_USER: ${{ secrets.DB_USERNAME }}
-          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: virtuallibrary_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         options: >-
@@ -37,15 +35,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Test
-        working-directory: backend
-        env:
-          SPRING_DATASOURCE_URL: ${{ secrets.DB_URL }}
-          SPRING_DATASOURCE_USERNAME: ${{ secrets.DB_USERNAME }}
-          SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          JWT_SECRET: ${{ secrets.JWT }}
-        run: mvn test
-
       - name: Build
         working-directory: backend
         run: mvn package -DskipTests
@@ -55,13 +44,18 @@ jobs:
         run: mvn spotbugs:check
 
       - name: Clean Verify
-        working-directory: backend
-        env:
-          SPRING_DATASOURCE_URL: ${{ secrets.DB_URL }}
-          SPRING_DATASOURCE_USERNAME: ${{ secrets.DB_USERNAME }}
-          SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          JWT_SECRET: ${{ secrets.JWT }}
+        working-directory: ./backend
         run: mvn clean verify
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/virtuallibrary_test
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: postgres
+          SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+          SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+          JWT_SECRET: ${{ secrets.JWT }}
+          JWT_EXPIRATION_MS: ${{ secrets.JWT_EXPIRATION }}
+          GOOGLE_BOOKS_API_KEY: ${{ secrets.GOOGLE_BOOKS_API_KEY }}
+          GOOGLE_BOOKS_API_BASE_URL: ${{ secrets.GOOGLE_BOOKS_API_BASE_URL }}
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
