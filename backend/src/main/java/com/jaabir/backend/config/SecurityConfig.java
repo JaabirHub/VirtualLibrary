@@ -2,6 +2,7 @@ package com.jaabir.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -44,12 +45,13 @@ public class SecurityConfig {
             context.securityContextRepository(new RequestAttributeSecurityContextRepository())
         )
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/auth/**").permitAll()
-            .requestMatchers("/api/books/search").permitAll()
-            .requestMatchers("/api/admin/**").hasRole("ADMIN")
-            .requestMatchers("/error").permitAll()
-            .anyRequest().authenticated()
-        )
+    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+    .requestMatchers("/api/auth/**").permitAll()
+    .requestMatchers("/api/books/search").permitAll()
+    .requestMatchers("/api/admin/**").hasRole("ADMIN")
+    .requestMatchers("/error").permitAll()
+    .anyRequest().authenticated()
+)
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
