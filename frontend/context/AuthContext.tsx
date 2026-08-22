@@ -1,3 +1,5 @@
+"use client";
+
 import { login as loginApi, register as registerApi, getMe } from "@/lib/auth";
 import { AuthResponse, User } from "@/types";
 import { createContext, useContext, useEffect, useState } from "react";
