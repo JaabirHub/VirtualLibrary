@@ -3,7 +3,7 @@ services:
     image: postgres:16
     container_name: virtual_library_db
     environment:
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_DB: virtual_library
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
@@ -38,6 +38,7 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      DB_NAME: virtual_library
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
