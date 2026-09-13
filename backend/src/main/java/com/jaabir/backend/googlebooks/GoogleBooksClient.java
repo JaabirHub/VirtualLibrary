@@ -1,10 +1,12 @@
 package com.jaabir.backend.googlebooks;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-@Component
+@Service
 public class GoogleBooksClient {
   
   private final RestTemplate restTemplate;
@@ -20,21 +22,34 @@ public class GoogleBooksClient {
     this.baseUrl = baseUrl;
   }
 
+  @Cacheable(
+      cacheNames = "googleBooksSearch",
+      key = "T(java.lang.String).format('%s:%d:%d', #query != null ? #query.trim().toLowerCase() : '', #page, #size)"
+  )
   public GoogleBooksResponse search(String query, int page, int size) {
-    String url = String.format(
-            "%s/volumes?q=%s&startIndex=%d&maxResults=%d&key=%s",
-            baseUrl, query, page * size, size, apiKey
-        );
+    String url = UriComponentsBuilder
+        .fromUriString(baseUrl + "/volumes")
+        .queryParam("q", query)
+        .queryParam("startIndex", page * size)
+        .queryParam("maxResults", size)
+        .queryParam("key", apiKey)
+        .build()
+        .toUriString();
 
     return restTemplate.getForObject(url, GoogleBooksResponse.class);
-  }
+}
 
+  @Cacheable(
+      cacheNames = "googleBookById",
+      key = "#googleVolumeId"
+  )
   public VolumeItem findByGoogleVolumeId(String googleVolumeId) {
-    String url = String.format(
-            "%s/volumes/%s?key=%s",
-            baseUrl, googleVolumeId, apiKey);
+    String url = UriComponentsBuilder
+        .fromUriString(baseUrl + "/volumes/" + googleVolumeId)
+        .queryParam("key", apiKey)
+        .build()
+        .toUriString();
 
     return restTemplate.getForObject(url, VolumeItem.class);
   }
-
 }
