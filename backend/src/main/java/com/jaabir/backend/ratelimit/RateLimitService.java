@@ -1,5 +1,6 @@
 package com.jaabir.backend.ratelimit;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class RateLimitService {
               .build();
 
       Bucket bucket = proxyManager.builder()
-              .build(key.getBytes(), () -> configuration);
+              .build(key.getBytes(StandardCharsets.UTF_8), () -> configuration);
 
       return bucket.tryConsume(1);
     }
@@ -43,7 +44,7 @@ public class RateLimitService {
               .build();
 
       Bucket bucket = proxyManager.builder()
-              .build(key.getBytes(), () -> configuration);
+              .build(key.getBytes(StandardCharsets.UTF_8), () -> configuration);
 
       return bucket.tryConsume(1);
     }
@@ -57,7 +58,7 @@ public class RateLimitService {
               .build();
 
       Bucket bucket = proxyManager.builder()
-              .build(key.getBytes(), () -> configuration);
+              .build(key.getBytes(StandardCharsets.UTF_8), () -> configuration);
 
       return bucket.tryConsume(1);
     }
