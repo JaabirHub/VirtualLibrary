@@ -123,6 +123,21 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
+
+		<!-- Bucket4j core -->
+		<dependency>
+				<groupId>com.github.vladimir-bukhtoyarov</groupId>
+				<artifactId>bucket4j-core</artifactId>
+				<version>7.6.0</version>
+		</dependency>
+
+		<!-- Bucket4j Redis (Jedis/Lettuce based – pick the one matching your Redis client) -->
+		<dependency>
+				<groupId>com.github.vladimir-bukhtoyarov</groupId>
+				<artifactId>bucket4j-redis</artifactId>
+				<version>7.6.0</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
