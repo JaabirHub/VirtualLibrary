@@ -1,5 +1,6 @@
 package com.jaabir.backend.config;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,15 +14,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 
+import com.jaabir.backend.ratelimit.RateLimitFilter;
 import com.jaabir.backend.security.JwtFilter;
 
 @Configuration
 public class SecurityConfig {
 
   private final JwtFilter jwtFilter;
+  private final RateLimitFilter rateLimitFilter;
 
-  public SecurityConfig(JwtFilter jwtFilter) {
+  public SecurityConfig(JwtFilter jwtFilter, RateLimitFilter rateLimitFilter) {
     this.jwtFilter = jwtFilter;
+    this.rateLimitFilter = rateLimitFilter;
   }
 
   @Bean
@@ -32,6 +36,17 @@ public class SecurityConfig {
   @Bean
   public SecurityContextRepository securityContextRepository() {
     return new RequestAttributeSecurityContextRepository();
+  }
+
+  @Bean
+  public FilterRegistrationBean<RateLimitFilter> rateLimitFilterRegistration(
+      RateLimitFilter rateLimitFilter
+  ) {
+    FilterRegistrationBean<RateLimitFilter> registration =
+      new FilterRegistrationBean<>(rateLimitFilter);
+
+    registration.setEnabled(false);
+    return registration;
   }
 
   @Bean
@@ -52,7 +67,8 @@ public class SecurityConfig {
     .requestMatchers("/error").permitAll()
     .anyRequest().authenticated()
 )
-        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterAfter(rateLimitFilter, JwtFilter.class);
 
     return http.build();
   }
